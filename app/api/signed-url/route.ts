@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
   const extractionId = searchParams.get("id");
 
   const schema = z.object({
-    id: z.string().uuid(),
+    id: z.string(),
   });
 
   const { success } = schema.safeParse({ id: extractionId });

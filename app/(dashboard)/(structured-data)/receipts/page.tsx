@@ -27,38 +27,38 @@ async function getData() {
       createdAt: "desc",
     },
     where: {
-      user: {
-        id: user!.id,
-      },
+      userId: user!.id
     },
     include: {
       extraction: true,
     },
   });
 
+  console.log('receipts ==>', receipts)
   if (receipts.length === 0) {
     return null;
   }
 
-  const rawAverageMonthlyExpenses: AverageMonthlyExpensesResult[] =
-    await prisma.$queryRaw`
-    WITH months AS (SELECT generate_series(1,12) AS month),
-    receipts AS (
-      SELECT
-        COALESCE(EXTRACT(MONTH FROM date), 0) AS month,
-        AVG("total") AS average
-      FROM "Receipt"
-      WHERE "userId" = ${user!.id}
-      GROUP BY EXTRACT(MONTH FROM date)
-    )
-    SELECT
-      months.month,
-      COALESCE(receipts.average, 0) AS average
-    FROM months
-    LEFT JOIN receipts ON months.month = receipts.month
-    ORDER BY month
-  `;
+  // const rawAverageMonthlyExpenses: AverageMonthlyExpensesResult[] =
+  //   await prisma.$queryRaw`
+  //   WITH months AS (SELECT generate_series(1,12) AS month),
+  //   receipts AS (
+  //     SELECT
+  //       COALESCE(EXTRACT(MONTH FROM date), 0) AS month,
+  //       AVG("total") AS average
+  //     FROM "Receipt"
+  //     WHERE "userId" = ${user!.id}
+  //     GROUP BY EXTRACT(MONTH FROM date)
+  //   )
+  //   SELECT
+  //     months.month,
+  //     COALESCE(receipts.average, 0) AS average
+  //   FROM months
+  //   LEFT JOIN receipts ON months.month = receipts.month
+  //   ORDER BY month
+  // `;
 
+  const rawAverageMonthlyExpenses: any[] = [];
   const averageMonthlyExpenses: FormattedAverageMonthlyExpensesResult[] =
     rawAverageMonthlyExpenses.map((m) => {
       const { shortName, longName } = getMonthNames(m.month);
@@ -214,7 +214,7 @@ export default async function ReceiptsPage() {
           emptyMessage="No receipts extracted yet."
           filterColumn={{
             columnId: "from",
-            placeholder: "Filter by location",
+            placeholder: "Filter by biller",
           }}
           columns={columns}
           categories={categories}

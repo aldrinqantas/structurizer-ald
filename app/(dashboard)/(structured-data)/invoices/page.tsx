@@ -26,9 +26,7 @@ export async function getData() {
       createdAt: "desc",
     },
     where: {
-      user: {
-        id: user!.id,
-      },
+      userId:user!.id
     },
     include: {
       extraction: true,
@@ -39,25 +37,25 @@ export async function getData() {
     return null;
   }
 
-  const rawAverageMonthlyExpenses: AverageMonthlyExpensesResult[] =
-    await prisma.$queryRaw`
-    WITH months AS (SELECT generate_series(1,12) AS month),
-    invoices AS (
-    SELECT
-      COALESCE(EXTRACT(MONTH FROM date), 0) AS month,
-      AVG("totalAmountDue") AS average
-    FROM "Invoice"
-    WHERE "userId" = ${user!.id}
-    GROUP BY EXTRACT(MONTH FROM date)
-    )
-    SELECT
-      months.month,
-      COALESCE(invoices.average, 0) AS average
-    FROM months
-    LEFT JOIN invoices ON months.month = invoices.month
-    ORDER BY month
-  `;
-
+  // const rawAverageMonthlyExpenses: AverageMonthlyExpensesResult[] =
+  //   await prisma.$queryRaw`
+  //   WITH months AS (SELECT generate_series(1,12) AS month),
+  //   invoices AS (
+  //   SELECT
+  //     COALESCE(EXTRACT(MONTH FROM date), 0) AS month,
+  //     AVG("totalAmountDue") AS average
+  //   FROM "Invoice"
+  //   WHERE "userId" = ${user!.id}
+  //   GROUP BY EXTRACT(MONTH FROM date)
+  //   )
+  //   SELECT
+  //     months.month,
+  //     COALESCE(invoices.average, 0) AS average
+  //   FROM months
+  //   LEFT JOIN invoices ON months.month = invoices.month
+  //   ORDER BY month
+  // `;
+  const rawAverageMonthlyExpenses = [] as any;
   const averageMonthlyExpenses: FormattedAverageMonthlyExpensesResult[] =
     rawAverageMonthlyExpenses.map((m: AverageMonthlyExpensesResult) => {
       const { shortName, longName } = getMonthNames(m.month);
