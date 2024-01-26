@@ -14,9 +14,9 @@ export const preferencesSchema = z
     enableReceiptsOneShot: z.boolean(),
     enableInvoicesOneShot: z.boolean(),
     enableCardStatementsOneShot: z.boolean(),
-    receiptExampleExtractionId: z.string().uuid().nullish(),
-    invoiceExampleExtractionId: z.string().uuid().nullish(),
-    cardStatementExampleExtractionId: z.string().uuid().nullish(),
+    receiptExampleExtractionId: z.string().nullish(),
+    invoiceExampleExtractionId: z.string().nullish(),
+    cardStatementExampleExtractionId: z.string().nullish(),
   })
   .refine(
     (data) => {

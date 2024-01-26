@@ -6,12 +6,12 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id             String          @id @default(uuid())
+  id             String          @id @default(auto()) @map("_id") @db.ObjectId
   name           String          @unique
   password       String
   extractions    Extraction[]
@@ -22,7 +22,7 @@ model User {
 }
 
 model Preferences {
-  id                               String   @id @default(uuid())
+  id                               String   @id @default(auto()) @map("_id") @db.ObjectId
   userId                           String   @unique
   classificationModel              String
   extractionModel                  String
@@ -44,7 +44,7 @@ enum Status {
 }
 
 model Extraction {
-  id            String         @id @default(uuid())
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
   userId        String
   filename      String
   objectPath    String
@@ -62,7 +62,7 @@ model Extraction {
 }
 
 model Receipt {
-  id           String        @id @default(uuid())
+  id           String        @id @default(auto()) @map("_id") @db.ObjectId
   userId       String
   extractionId String        @unique
   objectPath   String
@@ -84,7 +84,7 @@ model Receipt {
 }
 
 model ReceiptItem {
-  id          String @id @default(uuid())
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
   receiptId   String
   description String
   quantity    Float
@@ -94,7 +94,7 @@ model ReceiptItem {
 }
 
 model Invoice {
-  id             String        @id @default(uuid())
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
   userId         String
   extractionId   String        @unique
   objectPath     String
@@ -116,7 +116,7 @@ model Invoice {
 }
 
 model InvoiceItem {
-  id          String @id @default(uuid())
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
   invoiceId   String
   description String
   amount      Float?
@@ -125,7 +125,7 @@ model InvoiceItem {
 }
 
 model CardStatement {
-  id               String            @id @default(uuid())
+  id               String            @id @default(auto()) @map("_id") @db.ObjectId
   userId           String
   extractionId     String            @unique
   objectPath       String
@@ -148,7 +148,7 @@ model CardStatement {
 }
 
 model CardTransaction {
-  id              String @id @default(uuid())
+  id              String @id @default(auto()) @map("_id") @db.ObjectId
   cardStatementId String
   category        String
   description     String

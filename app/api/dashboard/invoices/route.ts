@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
   const invoiceId = searchParams.get("id");
 
   const schema = z.object({
-    id: z.string().uuid(),
+    id: z.string(),
   });
 
   const { success } = schema.safeParse({ id: invoiceId });

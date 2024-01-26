@@ -64,7 +64,7 @@ export async function PUT(req: Request) {
   }
 
   const schema = z.object({
-    id: z.string().uuid(),
+    id: z.string(),
     json: z.string(),
     category: z.string().refine((category) => categories.has(category)),
   });

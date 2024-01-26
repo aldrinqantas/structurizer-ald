@@ -8,6 +8,7 @@ import { log } from "@/lib/utils";
 
 export async function GET(req: NextRequest) {
   const user = await getUser();
+
   if (!user) {
     log.warn("Receipts", req.method, "Access denied");
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
@@ -16,7 +17,7 @@ export async function GET(req: NextRequest) {
   const receiptId = searchParams.get("id");
 
   const schema = z.object({
-    id: z.string().uuid(),
+    id: z.string(),
   });
 
   const { success } = schema.safeParse({ id: receiptId });
